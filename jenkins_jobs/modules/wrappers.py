@@ -974,6 +974,10 @@ def sauce_ondemand(parser, xml_parent, data):
     :arg bool launch-sauce-connect-on-slave: Whether to launch sauce connect
         on the slave. (default false)
     :arg str https-protocol: The https protocol to use (default '')
+    :arg bool use-generated-tunnel-identifier: Whether to generate a unique
+        tunnel id for each sauce connect instance. If true sauce connect
+        will be started with an -i option, and a unique auto-generated id
+        will be available via TUNNEL_IDENTIFIER env variable. (default false)
     :arg str sauce-connect-options: Options to pass to sauce connect
         (default '')
 
@@ -992,6 +996,7 @@ def sauce_ondemand(parser, xml_parent, data):
               - Linuxfirefox10
               - Linuxfirefox11
             launch-sauce-connect-on-slave: true
+            use-generated-tunnel-identifier: true
     """
     sauce = XML.SubElement(xml_parent, 'hudson.plugins.sauce__ondemand.'
                            'SauceOnDemandBuildWrapper')
@@ -1032,6 +1037,8 @@ def sauce_ondemand(parser, xml_parent, data):
         'launch-sauce-connect-on-slave', False)).lower()
     protocol = data.get('https-protocol', '')
     XML.SubElement(sauce, 'httpsProtocol').text = protocol
+    XML.SubElement(sauce, 'useGeneratedTunnelIdentifier').text = str(data.get(
+        'use-generated-tunnel-identifier', False)).lower()
     options = data.get('sauce-connect-options', '')
     XML.SubElement(sauce, 'options').text = options
 
